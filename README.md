@@ -15,12 +15,32 @@ L’objectif est d’étudier l’évolution du profil sociodémographique des �
 
 ## Technologies utilisées
 
+- Python
+- pandas
+- Jupyter Notebook
 - SQL
 - Snowflake
 - dbt
 - YAML
 - Git
 - Visual Studio Code
+
+## Préparation des données avec Python
+
+Avant leur chargement dans Snowflake, les données démographiques de l’INSEE sont préparées avec Python et pandas.
+
+Cette étape permet de :
+
+- sélectionner les années 2022 à 2025 ;
+- conserver les régions utiles à l’analyse ;
+- harmoniser les noms des régions ;
+- transformer les données au format long ;
+- aligner les tranches d’âge avec celles des données étudiantes ;
+- regrouper les populations âgées de 60 ans ou plus ;
+- effectuer des contrôles de cohérence ;
+- exporter un fichier prêt à être chargé dans Snowflake.
+
+➡️ [Consulter le notebook de préparation](notebooks/01_prepare_insee_population.ipynb)
 
 ## Architecture du projet
 
