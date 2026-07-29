@@ -1,0 +1,25 @@
+# Dossiers générés par dbt
+target/
+dbt_packages/
+logs/
+
+# Configuration personnelle et données sensibles
+profiles.yml
+.env
+.env.*
+
+# Fichiers Python
+__pycache__/
+*.pyc
+
+# Fichiers système
+.DS_Store
+Thumbs.db
+
+# Éditeurs
+.vscode/
+.idea/
+
+# Données brutes
+data/
+*.csv
