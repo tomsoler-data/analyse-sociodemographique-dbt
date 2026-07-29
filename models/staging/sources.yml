@@ -1,0 +1,79 @@
+version: 2
+
+sources:
+  - name: raw
+    description: "Données brutes chargées dans Snowflake pour le projet d'analyse sociodémographique."
+    database: OC_DBT_PROJECT
+    schema: RAW
+
+    tables:
+      - name: STUDENTS
+        description: "Données internes OpenClassrooms des étudiants inscrits dans les parcours Data."
+        columns:
+          - name: USER_ID
+            description: "Identifiant technique unique de l'étudiant."
+            tests:
+              - not_null
+
+          - name: PATH_CATEGORY_NAME
+            description: "Catégorie du parcours suivi par l'étudiant."
+            tests:
+              - not_null
+              - accepted_values:
+                  arguments:
+                    values: ['Data']
+
+          - name: AGE_GROUP
+            description: "Classe d'âge de l'étudiant au moment du début du parcours."
+            tests:
+              - not_null
+
+          - name: GENDER
+            description: "Genre déclaré par l'étudiant. Peut être nul dans la source brute."
+
+          - name: REGION
+            description: "Région de résidence de l'étudiant."
+            tests:
+              - not_null
+
+          - name: YEAR_PATH_STARTED
+            description: "Année de début du parcours."
+            tests:
+              - not_null
+              - accepted_values:
+                  arguments:
+                    values: [2022, 2023, 2024, 2025]
+
+      - name: INSEE_POPULATION
+        description: "Données INSEE préparées de population par année, région, genre et tranche d'âge."
+        columns:
+          - name: YEAR_INSEE
+            description: "Année de référence de la population INSEE."
+            tests:
+              - not_null
+              - accepted_values:
+                  arguments:
+                    values: [2022, 2023, 2024, 2025]
+
+          - name: REGION
+            description: "Région de résidence."
+            tests:
+              - not_null
+
+          - name: GENDER
+            description: "Genre de la population, Homme ou Femme."
+            tests:
+              - not_null
+              - accepted_values:
+                  arguments:
+                    values: ['Homme', 'Femme']
+
+          - name: AGE_GROUP
+            description: "Tranche d'âge harmonisée avec les données OpenClassrooms."
+            tests:
+              - not_null
+
+          - name: POPULATION_INSEE
+            description: "Population INSEE pour la combinaison année, région, genre et tranche d'âge."
+            tests:
+              - not_null

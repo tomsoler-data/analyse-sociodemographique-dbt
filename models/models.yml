@@ -1,0 +1,205 @@
+version: 2
+
+models:
+  - name: stg_students
+    description: "Modèle de staging des données internes OpenClassrooms. Il filtre les étudiants du parcours Data et standardise les valeurs de genre."
+    columns:
+      - name: user_id
+        description: "Identifiant technique unique de l'étudiant."
+        tests:
+          - not_null
+
+      - name: path_category_name
+        description: "Catégorie du parcours suivi par l'étudiant."
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['Data']
+
+      - name: age_group
+        description: "Classe d'âge de l'étudiant."
+        tests:
+          - not_null
+
+      - name: gender
+        description: "Genre standardisé de l'étudiant : Homme, Femme ou Non renseigné."
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['Homme', 'Femme', 'Non renseigné']
+
+      - name: region
+        description: "Région de résidence de l'étudiant."
+        tests:
+          - not_null
+
+      - name: year_path_started
+        description: "Année de début du parcours."
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: [2022, 2023, 2024, 2025]
+
+  - name: stg_insee_population
+    description: "Modèle de staging des données INSEE de population par année, région, genre et tranche d'âge."
+    columns:
+      - name: year_insee
+        description: "Année de référence de la population INSEE."
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: [2022, 2023, 2024, 2025]
+
+      - name: region
+        description: "Région de résidence."
+        tests:
+          - not_null
+
+      - name: gender
+        description: "Genre de la population : Homme ou Femme."
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['Homme', 'Femme']
+
+      - name: age_group
+        description: "Tranche d'âge harmonisée avec les données OpenClassrooms."
+        tests:
+          - not_null
+
+      - name: population_insee
+        description: "Population INSEE pour la combinaison année, région, genre et tranche d'âge."
+        tests:
+          - not_null
+
+  - name: int_students_by_profile
+    description: "Modèle intermédiaire agrégeant les étudiants OpenClassrooms par année, région, genre et tranche d'âge."
+    columns:
+      - name: year
+        description: "Année de début du parcours."
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: [2022, 2023, 2024, 2025]
+
+      - name: region
+        description: "Région de résidence."
+        tests:
+          - not_null
+
+      - name: gender
+        description: "Genre standardisé de l'étudiant."
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['Homme', 'Femme', 'Non renseigné']
+
+      - name: age_group
+        description: "Tranche d'âge de l'étudiant."
+        tests:
+          - not_null
+
+      - name: nb_students_oc
+        description: "Nombre d'étudiants OpenClassrooms distincts pour le profil sociodémographique."
+        tests:
+          - not_null
+
+  - name: int_insee_population_by_profile
+    description: "Modèle intermédiaire agrégeant la population INSEE par année, région, genre et tranche d'âge."
+    columns:
+      - name: year
+        description: "Année de référence."
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: [2022, 2023, 2024, 2025]
+
+      - name: region
+        description: "Région de résidence."
+        tests:
+          - not_null
+
+      - name: gender
+        description: "Genre de la population."
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['Homme', 'Femme']
+
+      - name: age_group
+        description: "Tranche d'âge."
+        tests:
+          - not_null
+
+      - name: population_insee
+        description: "Population INSEE agrégée pour le profil sociodémographique."
+        tests:
+          - not_null
+
+  - name: mart_sociodemographic_comparison
+    description: "Table finale comparant les profils sociodémographiques des étudiants OpenClassrooms avec la population INSEE."
+    columns:
+      - name: year
+        description: "Année de comparaison."
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: [2022, 2023, 2024, 2025]
+
+      - name: region
+        description: "Région de résidence."
+        tests:
+          - not_null
+
+      - name: gender
+        description: "Genre utilisé pour la comparaison avec l'INSEE."
+        tests:
+          - not_null
+
+      - name: age_group
+        description: "Tranche d'âge utilisée pour la comparaison."
+        tests:
+          - not_null
+
+      - name: nb_students_oc
+        description: "Nombre d'étudiants OpenClassrooms distincts pour le profil."
+        tests:
+          - not_null
+
+      - name: population_insee
+        description: "Population INSEE du profil."
+        tests:
+          - not_null
+
+      - name: total_students_oc_year
+        description: "Nombre total d'étudiants OpenClassrooms comparables pour l'année."
+        tests:
+          - not_null
+
+      - name: total_population_insee_year
+        description: "Population INSEE totale comparable pour l'année."
+        tests:
+          - not_null
+
+      - name: part_students_oc
+        description: "Part du profil dans la population étudiante OpenClassrooms de l'année."
+        tests:
+          - not_null
+
+      - name: part_population_insee
+        description: "Part du profil dans la population INSEE de l'année."
+        tests:
+          - not_null
+
+      - name: representation_index
+        description: "Indice de représentation : part des étudiants OpenClassrooms divisée par la part de la population INSEE."
